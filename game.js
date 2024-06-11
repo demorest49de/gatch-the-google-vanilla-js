@@ -52,7 +52,12 @@ export class Game {
   
   #checkPlayersCoordinates() {
     const [player1, player2] = this.#getRandomPlayerCoords();
-    if (JSON.stringify(player1.position) !== JSON.stringify(player2.position)) {
+    // if (JSON.stringify(player1.position) !== JSON.stringify(player2.position)) {
+    //   return {player1, player2};
+    // }
+    const num1 = new Number(`${player1.position.x}${player1.position.y}`)
+    const num2 = new Number(`${player2.position.x}${player2.position.y}`)
+    if  (num1  !=  num2)  {
       return {player1, player2};
     }
     
