@@ -24,9 +24,12 @@ test('check start game', () => {
   expect(game.status).toBe(Status.inProgress);
 });
 
-
-test('check statuses', () => {
+test('check player position', () => {
   
   expect(Status.pending).toBe('pending');
   expect(Status.inProgress).toBe('in-progress');
+});
+
+test('', () => {
+
 });
