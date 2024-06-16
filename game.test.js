@@ -35,8 +35,7 @@ test('check player position', () => {
 });
 
 test('check player status', () => {
-  const game = new Game();
-  
-  
+  const game = new Game(3, 3);
+  expect(game.player1.position.x).not.toBe(0);
  
 });
