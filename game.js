@@ -21,9 +21,9 @@ export class Game {
     return this.#settings;
   }
   
-  set settings(settings) {
-    this.#settings = settings;
-  }
+  // set settings(settings) {
+  //   this.#settings = settings;
+  // }
   
   get status() {
     return this.#status;
@@ -37,12 +37,26 @@ export class Game {
     return this.#player2;
   }
   
+  get google() {
+    return this.#google;
+  }
+  
   set status(status) {
     this.#status = status;
   }
   
+  setSettings(settings) {
+    this.#settings = {
+      ...this.#settings,
+      gridSize:
+        {...this.#settings.gridSize, ...settings},
+      ...settings
+    };
+  }
+  
   startGame() {
     this.#status = Status.inProgress;
+    this.#createUnits();
   }
   
   #getPlayersPosition() {
@@ -50,16 +64,6 @@ export class Game {
   }
   
   #checkPlayersCoordinates() {
-    // const [player1, player2] = this.#getRandomPlayerCoords();
-    // if (JSON.stringify(player1.position) !== JSON.stringify(player2.position)) {
-    //   return {player1, player2};
-    // }
-    // const google = this.#createInitialPosition();
-    // const num1 = new Number(`${player1.position.x}${player1.position.y}`);
-    // const num2 = new Number(`${player2.position.x}${player2.position.y}`);
-    // if (num1 != num2) {
-    //   return {player1, player2};
-    // }
     
     const player1 = this.#createInitialPosition();
     const player2 = this.#createInitialPosition();
@@ -73,13 +77,13 @@ export class Game {
     playersPos.add(this.#createNumber(player2));
     
     while (playersPos.size !== 3) {
-      playersPos.add( this.#createNumber(this.#createInitialPosition()));
+      playersPos.add(this.#createNumber(this.#createInitialPosition()));
     }
     
     return {player1, player2, google};
   }
   
-  #createNumber(player){
+  #createNumber(player) {
     return new Number(`${player.position.x}${player.position.y}`).valueOf();
   }
   
@@ -89,30 +93,20 @@ export class Game {
     return {position: {x, y}};
   }
   
-  // #getRandomPlayerCoords() {
-  //   const playersPos = new Array(2).fill({}).map(() => (this.#createInitialPosition()));
-  //   let i = 0;
-  //   while (i < playersPos.length) {
-  //     const x = this.#getRandomNumber(1, this.#settings.gridSize.rows);
-  //     const y = this.#getRandomNumber(1, this.#settings.gridSize.columns);
-  //     playersPos[i].position.x = x;
-  //     playersPos[i].position.y = y;
-  //     i++;
-  //   }
-  //   return playersPos;
-  // }
-  
   #getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
   }
   
-  constructor(rows = 2, cols = 2) {
+  constructor() {
     this.#settings = {
       gridSize: {
-        rows: rows,
-        columns: cols,
+        rows: 3,
+        columns: 3,
       }
     };
+  }
+  
+  #createUnits() {
     const {
       player1,
       player2,
@@ -122,7 +116,6 @@ export class Game {
     this.#player1 = new Player(player1.position, 1);
     this.#player2 = new Player(player2.position, 2);
     this.#google = new Google(google.position);
-    
   }
 }
 
