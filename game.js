@@ -41,25 +41,6 @@ export class Game {
     this.#status = status;
   }
   
-  constructor(rows = 2, cols = 2) {
-    this.#settings = {
-      gridSize: {
-        rows: rows,
-        columns: cols,
-      }
-    };
-    const {
-      player1,
-      player2,
-      google,
-    } = this.#getPlayersPosition();
-    
-    this.#player1 = new Player(player1.position, 1);
-    this.#player2 = new Player(player2.position, 2);
-    this.#google = new Google(google.position);
-    
-  }
-  
   startGame() {
     this.#status = Status.inProgress;
   }
@@ -108,21 +89,40 @@ export class Game {
     return {position: {x, y}};
   }
   
-  #getRandomPlayerCoords() {
-    const playersPos = new Array(2).fill({}).map(() => (this.#createInitialPosition()));
-    let i = 0;
-    while (i < playersPos.length) {
-      const x = this.#getRandomNumber(1, this.#settings.gridSize.rows);
-      const y = this.#getRandomNumber(1, this.#settings.gridSize.columns);
-      playersPos[i].position.x = x;
-      playersPos[i].position.y = y;
-      i++;
-    }
-    return playersPos;
-  }
+  // #getRandomPlayerCoords() {
+  //   const playersPos = new Array(2).fill({}).map(() => (this.#createInitialPosition()));
+  //   let i = 0;
+  //   while (i < playersPos.length) {
+  //     const x = this.#getRandomNumber(1, this.#settings.gridSize.rows);
+  //     const y = this.#getRandomNumber(1, this.#settings.gridSize.columns);
+  //     playersPos[i].position.x = x;
+  //     playersPos[i].position.y = y;
+  //     i++;
+  //   }
+  //   return playersPos;
+  // }
   
   #getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  
+  constructor(rows = 2, cols = 2) {
+    this.#settings = {
+      gridSize: {
+        rows: rows,
+        columns: cols,
+      }
+    };
+    const {
+      player1,
+      player2,
+      google,
+    } = this.#getPlayersPosition();
+    
+    this.#player1 = new Player(player1.position, 1);
+    this.#player2 = new Player(player2.position, 2);
+    this.#google = new Google(google.position);
+    
   }
 }
 
@@ -145,4 +145,5 @@ export class Google extends Unit {
   }
 }
 
-const game = new Game();
+//  "type": "module" , - in package.json
+// const game = new Game();
