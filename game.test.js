@@ -17,11 +17,9 @@ test('check init settings', () => {
 
 test('check start game', () => {
   const game = new Game();
-  game.startGame();
+  
   expect(game.status).toBe(Status.pending);
-  
   game.startGame();
-  
   expect(game.status).toBe(Status.inProgress);
 });
 
@@ -55,9 +53,10 @@ test('check google position', async () => {
   });
   
   game.startGame();
+  
   const prevPosition = game.google.position;
   
-  await delay();
+  await delay(121);
   
   expect(prevPosition).not.toBe(game.google.position);
 });

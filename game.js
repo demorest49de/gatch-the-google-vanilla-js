@@ -45,7 +45,7 @@ export class Game {
     this.#status = status;
   }
   
-  setSettings(settings) {
+  setSettings(settings = {}) {
     this.#settings = {
       ...this.#settings,
       gridSize:
@@ -117,6 +117,29 @@ export class Game {
     this.#player2 = new Player(player2.position, 2);
     this.#google = new Google(google.position);
   }
+  
+  #validatePlayerIsInsideOffBorder(player, moveInfo) {
+    const positionCopy = player.position.clone();
+    
+    if (moveInfo.x) positionCopy.x += moveInfo.x;
+    if (moveInfo.y) positionCopy.y += moveInfo.y;
+    
+    if (positionCopy.x < 1 || positionCopy.x > this.#settings.gridSize.rows) return true;
+    if (positionCopy.y < 1 || positionCopy.y > this.#settings.gridSize.columns) return true;
+    
+    return false;
+  }
+  
+  #checkDidPlayersOverlap(currentPlayer, otherPlayer, moveInfo) {
+    const positionCopy = currentPlayer.position.clone();
+    
+    if (moveInfo.x) positionCopy.x += moveInfo.x;
+    if (moveInfo.y) positionCopy.y += moveInfo.y;
+    
+    return positionCopy.equal(otherPlayer.position);
+  }
+  
+  
 }
 
 class Unit {
@@ -129,6 +152,22 @@ export class Player extends Unit {
   constructor(position, id) {
     super(position);
     this.id = id;
+  }
+}
+
+export class Position {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+  
+  clone() {
+    return new Position(this.x, this.y);
+  }
+  
+  equal(position) {
+    const {x, y} = position;
+    return this.x === x && this.y === y;
   }
 }
 
