@@ -14,7 +14,7 @@ describe("Game Test", function () {
   });
   
   test('check game init', () => {
-    // const game = new Game();
+    
     game.setSettings({
       gridSize: {
         rows: 4,
@@ -111,6 +111,8 @@ describe("Game Test", function () {
   });
   
 });
+
+
 const delay = (ms) => {
   return new Promise(r => setTimeout(r, ms));
 };

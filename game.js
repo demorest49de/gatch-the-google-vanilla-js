@@ -48,10 +48,29 @@ export class Game {
     }
     
     const isOnGoogle = this.#checkPlayerDidCatchGoogle(player);
+    
+    if (isOnGoogle) {
+      this.#updateScore(player);
+      if(this.#score[player.id].points === this.#settings.maxPointsToWin){
+        this.stopGame();
+        return;
+      }
+      this.#moveGoogleToRandomPosition();
+    }
   }
   
   #checkPlayerDidCatchGoogle(player) {
     return player.position.equal(this.#google.position);
+  }
+  
+  #updateScore(player) {
+    this.#score[player.id].points++;
+  }
+  
+  stopGame() {
+    clearInterval(this.#googleJumpIntervalId);
+    this.#google.position = new Position(0, 0);
+    this.#status = Status.finished;
   }
   
   #movePlayer1Right() {
@@ -131,10 +150,6 @@ export class Game {
     }, this.#settings.jumpGoogleInterval);
   }
   
-  stopGame() {
-    clearInterval(this.#googleJumpIntervalId);
-  }
-  
   #checkRandomPlayersPosition() {
     
     
@@ -173,13 +188,13 @@ export class Game {
   }
   
   #createNumber(player) {
-    return new Number(`${player.position.x}${player.position.y}`).valueOf();
+    return new Number(`${player.x}${player.y}`).valueOf();
   }
   
   #createRandomPosition() {
     const x = this.#getRandomNumber(1, this.#settings.gridSize.rows);
     const y = this.#getRandomNumber(1, this.#settings.gridSize.columns);
-    return {position: {x, y}};
+    return new Position(x, y);
   }
   
   #getRandomNumber(min, max) {
@@ -192,7 +207,8 @@ export class Game {
         rows: 3,
         columns: 3,
       },
-      jumpGoogleInterval: 150
+      jumpGoogleInterval: 150,
+      maxPointsToWin: 10,
     };
   }
   
@@ -202,9 +218,9 @@ export class Game {
       player2,
       google,
     } = this.#checkRandomPlayersPosition();
-    this.#player1 = new Player(player1.position, 1);
-    this.#player2 = new Player(player2.position, 2);
-    this.#google = new Google(google.position);
+    this.#player1 = new Player(player1, 1);
+    this.#player2 = new Player(player2, 2);
+    this.#google = new Google(google);
     
     // TODO add or remove below
     this.#allUnits = [this.#player1, this.#player2, this.#google];
