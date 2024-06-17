@@ -12,10 +12,10 @@ export class Game {
   #status = Status.pending;
   
   #player1;
-  
   #player2;
-  
   #google;
+  
+  #allUnits;
   
   get settings() {
     return this.#settings;
@@ -59,35 +59,37 @@ export class Game {
     this.#createUnits();
   }
   
-  #getPlayersPosition() {
-    return this.#checkPlayersCoordinates();
-  }
-  
-  #checkPlayersCoordinates() {
-    
-    const player1 = this.#createInitialPosition();
-    const player2 = this.#createInitialPosition();
-    const google = {position: {x: 0, y: 0}};
+  #checkRandomPlayersPosition() {
+    const playerNames = [
+      'player1',
+      'player2',
+      'google',
+    ];
     
     const playersPos = new Set();
-    playersPos.add(this.#createNumber(google));
-    // playersPos.add(this.#createNumber({position: {x: 1, y: 2}}));
-    // playersPos.add(this.#createNumber({position: {x: 1, y: 2}}));
-    playersPos.add(this.#createNumber(player1));
-    playersPos.add(this.#createNumber(player2));
     
-    while (playersPos.size !== 3) {
-      playersPos.add(this.#createNumber(this.#createInitialPosition()));
+    const positions = {};
+    while (playersPos.size < playerNames.length) {
+      const prevSize = playersPos.size;
+      const playerName = playerNames[prevSize];
+      const newPos = this.#createRandomPosition();
+      playersPos.add(this.#createNumber(newPos));
+      
+      prevSize !== playersPos.size && (positions[playerName] = newPos);
     }
     
-    return {player1, player2, google};
+    return positions;
+  }
+  
+  #checkGoogleUniquePosition() {
+  
   }
   
   #createNumber(player) {
     return new Number(`${player.position.x}${player.position.y}`).valueOf();
   }
   
-  #createInitialPosition() {
+  #createRandomPosition() {
     const x = this.#getRandomNumber(1, this.#settings.gridSize.rows);
     const y = this.#getRandomNumber(1, this.#settings.gridSize.columns);
     return {position: {x, y}};
@@ -106,16 +108,21 @@ export class Game {
     };
   }
   
+  #moveGoogleToRandomPosition() {
+  
+  }
+  
   #createUnits() {
     const {
       player1,
       player2,
       google,
-    } = this.#getPlayersPosition();
-    
+    } = this.#checkRandomPlayersPosition();
     this.#player1 = new Player(player1.position, 1);
     this.#player2 = new Player(player2.position, 2);
     this.#google = new Google(google.position);
+    // TODO add or remove below
+    this.#allUnits = [this.#player1, this.#player2, this.#google];
   }
   
   #validatePlayerIsInsideOffBorder(player, moveInfo) {
@@ -165,8 +172,7 @@ export class Position {
     return new Position(this.x, this.y);
   }
   
-  equal(position) {
-    const {x, y} = position;
+  equal({x, y}) {
     return this.x === x && this.y === y;
   }
 }
