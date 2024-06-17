@@ -16,6 +16,15 @@ export class Game {
   #google;
   
   #allUnits;
+  #allPlayers;
+  
+  #playerNames = [
+    'player1',
+    'player2',
+    'google',
+  ];
+  
+  #googleJumpIntervalId;
   
   get settings() {
     return this.#settings;
@@ -57,21 +66,24 @@ export class Game {
   startGame() {
     this.#status = Status.inProgress;
     this.#createUnits();
+    this.#googleJumpIntervalId = setInterval(() => {
+      this.#moveGoogleToRandomPosition();
+    }, this.#settings.jumpGoogleInterval);
+  }
+  
+  stopGame()  {
+    clearInterval(this.#googleJumpIntervalId);
   }
   
   #checkRandomPlayersPosition() {
-    const playerNames = [
-      'player1',
-      'player2',
-      'google',
-    ];
+    
     
     const playersPos = new Set();
     
     const positions = {};
-    while (playersPos.size < playerNames.length) {
+    while (playersPos.size < this.#playerNames.length) {
       const prevSize = playersPos.size;
-      const playerName = playerNames[prevSize];
+      const playerName = this.#playerNames[prevSize];
       const newPos = this.#createRandomPosition();
       playersPos.add(this.#createNumber(newPos));
       
@@ -81,8 +93,23 @@ export class Game {
     return positions;
   }
   
-  #checkGoogleUniquePosition() {
-  
+  #moveGoogleToRandomPosition() {
+    const players = this.#allPlayers;
+    
+    const playersPos = new Set();
+    
+    
+    for (const player of Object.values(players)) {
+      playersPos.add(this.#createNumber(player));
+    }
+    
+    while (playersPos.size < this.#playerNames.length) {
+      const prevSize = playersPos.size;
+      const newGooglePos = this.#createRandomPosition();
+      playersPos.add(this.#createNumber(newGooglePos));
+      
+      prevSize !== playersPos.size && (this.#google.position = newGooglePos);
+    }
   }
   
   #createNumber(player) {
@@ -104,12 +131,9 @@ export class Game {
       gridSize: {
         rows: 3,
         columns: 3,
-      }
+      },
+      jumpGoogleInterval: 150
     };
-  }
-  
-  #moveGoogleToRandomPosition() {
-  
   }
   
   #createUnits() {
@@ -121,8 +145,12 @@ export class Game {
     this.#player1 = new Player(player1.position, 1);
     this.#player2 = new Player(player2.position, 2);
     this.#google = new Google(google.position);
+    
     // TODO add or remove below
     this.#allUnits = [this.#player1, this.#player2, this.#google];
+    
+    // TODO add or remove below
+    this.#allPlayers = [this.#player1, this.#player2];
   }
   
   #validatePlayerIsInsideOffBorder(player, moveInfo) {
