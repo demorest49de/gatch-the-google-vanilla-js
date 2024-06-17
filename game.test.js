@@ -1,4 +1,4 @@
-import {Game} from "./game";
+import {Game, Position} from "./game";
 import {Status} from "./constants";
 
 describe("Game Test", function () {
@@ -77,13 +77,17 @@ describe("Game Test", function () {
   test('Check player moving validation in one row 3x1', async () => {
     game.setSettings({
       gridSize: {
-        rows: 4,
-        columns: 4,
+        rows: 3,
+        columns: 3,
       },
       jumpGoogleInterval: 10,
     });
     game.startGame();
     
+    game.player1.position = new Position(3, 1);
+    game.player2.position = new Position(2, 1);
+    game.google.position = new Position(1, 1);
+    // const prevPosition = new Position(1, 1);
     const prevPosition = game.google.position.clone();
     
     const deltaForPlayer1 = game.google.position.x - game.player1.position.x;
