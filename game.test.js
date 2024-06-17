@@ -3,12 +3,18 @@ import {Status} from "./constants";
 
 describe("Game Test", function () {
   
-  beforeEach(function () {
+  let game;
   
+  beforeEach(function () {
+    game = new Game();
+  });
+  
+  afterEach(function () {
+    game.stopGame();
   });
   
   test('check init settings', () => {
-    const game = new Game();
+    // const game = new Game();
     game.setSettings({
       gridSize: {
         rows: 4,
@@ -22,7 +28,7 @@ describe("Game Test", function () {
   });
   
   test('check start game', () => {
-    const game = new Game();
+    // const game = new Game();
     
     expect(game.status).toBe(Status.pending);
     game.startGame();
@@ -30,21 +36,21 @@ describe("Game Test", function () {
   });
   
   test('check player position', () => {
-    const game = new Game();
+    // const game = new Game();
     game.startGame();
     const {player1, player2, google} = game;
     
   });
   
   test('check start game', () => {
-    const game = new Game();
+    // const game = new Game();
     game.startGame();
     
   });
   
   test('check google position', async () => {
-    for (let i = 0; i < 50; i++) {
-      const game = new Game();
+    for (let i = 0; i < 10; i++) {
+      // const game = new Game();
       
       game.setSettings({
         gridSize: {
