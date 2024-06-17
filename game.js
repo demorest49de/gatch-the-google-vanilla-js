@@ -26,6 +26,66 @@ export class Game {
   
   #googleJumpIntervalId;
   
+  #score = {
+    1: {points: 0},
+    2: {points: 0}
+  };
+  
+  #movePlayer(player, otherPlayer, moveInfo) {
+    const isOnBorder = this.checkPlayerIsOnBorder(player, moveInfo);
+    const isOnDifferentPlayer = this.#checkDidPlayersOverlap(player, otherPlayer, moveInfo);
+    
+    if (isOnBorder || isOnDifferentPlayer) return;
+    
+    const {x, y} = player.position;
+    
+    if (moveInfo.x) {
+      player.position = new Position(x + moveInfo.x, y);
+    }
+    
+    if (moveInfo.y) {
+      player.position = new Position(x, y + moveInfo.y);
+    }
+    
+    const isOnGoogle = this.#checkPlayerDidCatchGoogle(player);
+  }
+  
+  #checkPlayerDidCatchGoogle(player) {
+    return player.position.equal(this.#google.position);
+  }
+  
+  #movePlayer1Right() {
+    this.#movePlayer(this.#player1, this.#player2, {x: 1});
+  }
+  
+  #movePlayer1Left() {
+    this.#movePlayer(this.#player1, this.#player2, {x: -1});
+  }
+  
+  #movePlayer1Up() {
+    this.#movePlayer(this.#player1, this.#player2, {y: 1});
+  }
+  
+  #movePlayer1Down() {
+    this.#movePlayer(this.#player1, this.#player2, {y: -1});
+  }
+  
+  #movePlayer2Right() {
+    this.#movePlayer(this.#player1, this.#player2, {x: 1});
+  }
+  
+  #movePlayer2Left() {
+    this.#movePlayer(this.#player1, this.#player2, {x: -1});
+  }
+  
+  #movePlayer2Up() {
+    this.#movePlayer(this.#player1, this.#player2, {y: 1});
+  }
+  
+  #movePlayer2Down() {
+    this.#movePlayer(this.#player1, this.#player2, {y: -1});
+  }
+  
   get settings() {
     return this.#settings;
   }
@@ -71,7 +131,7 @@ export class Game {
     }, this.#settings.jumpGoogleInterval);
   }
   
-  stopGame()  {
+  stopGame() {
     clearInterval(this.#googleJumpIntervalId);
   }
   
@@ -153,7 +213,7 @@ export class Game {
     this.#allPlayers = [this.#player1, this.#player2];
   }
   
-  #validatePlayerIsInsideOffBorder(player, moveInfo) {
+  checkPlayerIsOnBorder(player, moveInfo) {
     const positionCopy = player.position.clone();
     
     if (moveInfo.x) positionCopy.x += moveInfo.x;
@@ -173,7 +233,6 @@ export class Game {
     
     return positionCopy.equal(otherPlayer.position);
   }
-  
   
 }
 
@@ -213,3 +272,6 @@ export class Google extends Unit {
 
 //  "type": "module" , - in package.json
 // const game = new Game();
+
+//ctrl + shift + "-" - fold
+//ctrl + shift + "+" - unfold
