@@ -63,8 +63,8 @@ describe("Game Test", function () {
       });
       
       game.startGame();
+      const prevPosition = game.googlePrevPositionTest;
       
-      const prevPosition = game.google.position;
       
       await delay(20);
       
@@ -87,7 +87,7 @@ describe("Game Test", function () {
     game.player1.position = new Position(3, 1);
     game.player2.position = new Position(2, 1);
     game.google.position = new Position(1, 1);
-    // const prevPosition = new Position(1, 1);
+    
     const prevPosition = game.google.position.clone();
     
     const deltaForPlayer1 = game.google.position.x - game.player1.position.x;

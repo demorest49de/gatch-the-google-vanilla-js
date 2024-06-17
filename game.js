@@ -141,14 +141,21 @@ export class Game {
     };
   }
   
+  get googlePrevPositionTest()  {
+    return this.#google.prevPos;
+  }
+  
   startGame() {
     this.#status = Status.inProgress;
     this.#createUnits();
     
+    //TODO remove after testing
+    this.#google.prevPos = this.#google.position;
+    
     // TODO use it on next random google position
-    // this.#googleJumpIntervalId = setInterval(() => {
-    //   this.#moveGoogleToRandomPosition();
-    // }, this.#settings.jumpGoogleInterval);
+    this.#googleJumpIntervalId = setInterval(() => {
+      this.#moveGoogleToRandomPosition();
+    }, this.#settings.jumpGoogleInterval);
   }
   
   #checkRandomPlayersPosition() {
@@ -285,6 +292,7 @@ export class Position {
 export class Google extends Unit {
   constructor(position) {
     super(position);
+    this.prevPos = new Position(0, 0);
   }
 }
 
