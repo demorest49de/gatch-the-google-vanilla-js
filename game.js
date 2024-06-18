@@ -103,10 +103,6 @@ export class Game {
     return this.#settings;
   }
   
-  // set settings(settings) {
-  //   this.#settings = settings;
-  // }
-  
   get status() {
     return this.#status;
   }
