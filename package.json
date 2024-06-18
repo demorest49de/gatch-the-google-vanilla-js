@@ -2,7 +2,7 @@
   "name": "catch-the-google",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "game.js",
   "scripts": {
     "test": "jest",
     "watch": "jest --watchAll"
